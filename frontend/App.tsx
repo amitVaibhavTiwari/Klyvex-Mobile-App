@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer, ThemeProvider } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   CheckoutScreen,
   ForgotPasswordScreen,
@@ -15,9 +15,11 @@ import {
 } from './src/screens';
 import SplashScreen from 'react-native-splash-screen';
 import GetStartedScreen from './src/screens/GetStartedScreen';
-import {ItemDetails} from './src/constants/types';
-import {getItem} from './src/utils/AsyncStorage';
-import {ActivityIndicator, View} from 'react-native';
+import { ItemDetails } from './src/constants/types';
+import { getItem } from './src/utils/AsyncStorage';
+import { ActivityIndicator, View } from 'react-native';
+import { GlobalContextProvider } from './src/lib/GlobalContext/GlobalContext';
+import ThemeWrapper from './src/components/ThemeWrapper/ThemeWrapper';
 
 export type RouteStackParamList = {
   Onboarding: undefined;
@@ -27,9 +29,9 @@ export type RouteStackParamList = {
   HomeScreen: undefined;
   Profile: undefined;
   Checkout: undefined;
-  PlaceOrder: {itemDetails: ItemDetails} | undefined;
+  PlaceOrder: { itemDetails: ItemDetails } | undefined;
   ForgotPassword: undefined;
-  ProductDetails: {itemDetails: ItemDetails} | undefined;
+  ProductDetails: { itemDetails: ItemDetails } | undefined;
 };
 
 const App = () => {
@@ -62,29 +64,33 @@ const App = () => {
     );
   }
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{headerShown: false}}
-          initialRouteName={showOnboarded ? 'Onboarding' : 'HomeScreen'}>
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="GetStarted" component={GetStartedScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-          <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen name="Checkout" component={CheckoutScreen} />
-          <Stack.Screen
-            name="ProductDetails"
-            component={ProductsDetailsScreen}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPasswordScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <GlobalContextProvider>
+        <ThemeWrapper>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName={showOnboarded ? 'Onboarding' : 'HomeScreen'}>
+              <Stack.Screen name="HomeScreen" component={HomeScreen} />
+              <Stack.Screen name="GetStarted" component={GetStartedScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+              <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="Signup" component={SignupScreen} />
+              <Stack.Screen name="Checkout" component={CheckoutScreen} />
+              <Stack.Screen
+                name="ProductDetails"
+                component={ProductsDetailsScreen}
+              />
+              <Stack.Screen
+                name="ForgotPassword"
+                component={ForgotPasswordScreen}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ThemeWrapper>
+      </GlobalContextProvider>
     </GestureHandlerRootView>
   );
 };

@@ -7,14 +7,14 @@ import {
   ScrollView,
   ImageSourcePropType,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {icons, images} from '../constants';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {CustomSearch, ProductItem} from '../components';
-import {CategoriesData, ProductData} from '../constants/data';
-import {removeItem} from '../utils/AsyncStorage';
-import {ProductTypes} from '../constants/types';
+import React, { useEffect, useState } from 'react';
+import { icons, images } from '../constants';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CustomSearch, ProductItem } from '../components';
+import { CategoriesData, ProductData } from '../constants/data';
+import { removeItem } from '../utils/AsyncStorage';
+import { ProductTypes } from '../constants/types';
 
 type Props = {};
 
@@ -46,7 +46,7 @@ const HomeTab = (props: Props) => {
     navigation.navigate('Setting');
     await removeItem('onboarded'); // will reset to onboarding
   };
-  const handleSelectCategory = () => {};
+  const handleSelectCategory = () => { };
   return (
     <ScrollView>
       {/* header */}
@@ -70,7 +70,7 @@ const HomeTab = (props: Props) => {
       <CustomSearch initialQuery="" />
       {/* features */}
       <View className="flex my-5 flex-row mx-5 justify-between ">
-        <Text className="text-2xl font-bold ">AVT </Text>
+        <Text className="text-2xl font-bold dark:text-red-700 ">AVT </Text>
         <View className="flex flex-row gap-x-3 ">
           {FeaturesData.map(item => (
             <View
@@ -90,10 +90,10 @@ const HomeTab = (props: Props) => {
       <View>
         <FlatList
           data={CategoriesData}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <TouchableOpacity onPress={handleSelectCategory}>
               <Image
-                source={{uri: item.image}} // it's url
+                source={{ uri: item.image }} // it's url
                 className="w-24 h-24 rounded-full"
               />
               <Text className="text-black-100/80 text-center text-lg font-medium">
@@ -148,7 +148,7 @@ const HomeTab = (props: Props) => {
       <View className="my-8">
         <FlatList
           data={products}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ProductItem
               image={item.image[0]}
               title={item.title}
@@ -223,7 +223,7 @@ const HomeTab = (props: Props) => {
       <View className="my-8">
         <FlatList
           data={products}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ProductItem
               image={item.image[0]}
               title={item.title}
