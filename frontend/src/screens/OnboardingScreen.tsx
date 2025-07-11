@@ -1,8 +1,6 @@
-import { View, Text, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
-import { images } from '../constants';
-import { SplashData } from '../constants/data';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { setItem } from '../utils/AsyncStorage';
@@ -16,7 +14,7 @@ export type RootStackParamList = {
 
 const OnboardingScreen = (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<RouteStackParamList>>();
-  
+
   const handleDone = async () => {
     await setItem('onboarded', 200);
     navigation.navigate('HomeScreen'); // on press will navigate to HomeScreen
@@ -30,21 +28,36 @@ const OnboardingScreen = (props: Props) => {
         pages={[
           {
             backgroundColor: '#fff',
-            image: <Image source={SplashData[0].image} />,
-            title: SplashData[0].title,
-            subtitle: SplashData[0].description,
+            image: (
+              <Image
+                source={{ uri: 'https://wallpapersok.com/images/high/sabrina-carpenter-playful-pose-7zgid16uwzlup7aw.jpg' }}
+                style={{ width: 300, height: 300, resizeMode: 'contain' }}
+              />
+            ),
+            title: "Waka Waka",
+            subtitle: "Onboarding screen 1, write whatever u like",
           },
           {
             backgroundColor: '#fff',
-            image: <Image source={SplashData[1].image} />,
-            title: SplashData[1].title,
-            subtitle: SplashData[1].description,
+            image: (
+              <Image
+                source={{ uri: 'https://www.zastavki.com/pictures/originals/2024/_Cute_blonde_actress_Sabrina_Carpenter_with_expressive_eyes_176226_.jpg' }}
+                style={{ width: 300, height: 300, resizeMode: 'contain' }}
+              />
+            ),
+            title: "Hola",
+            subtitle: "Onboarding screen 2, write whatever u like",
           },
           {
             backgroundColor: '#fff',
-            image: <Image source={SplashData[2].image} />,
-            title: SplashData[2].title,
-            subtitle: SplashData[2].description,
+            image: (
+              <Image
+                source={{ uri: 'https://www.zastavki.com/pictures/originals/2024/_Cute_blonde_actress_Sabrina_Carpenter_with_expressive_eyes_176226_.jpg' }}
+                style={{ width: 300, height: 300, resizeMode: 'contain' }}
+              />
+            ),
+            title: "Heyy",
+            subtitle: "Onboarding screen 3, write whatever u like",
           },
         ]}
       />

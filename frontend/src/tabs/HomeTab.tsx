@@ -1,270 +1,203 @@
+import React from 'react';
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
   ScrollView,
-  ImageSourcePropType,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { icons, images } from '../constants';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { CustomSearch, ProductItem } from '../components';
-import { CategoriesData, ProductData } from '../constants/data';
-import { removeItem } from '../utils/AsyncStorage';
-import { ProductTypes } from '../constants/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../App';
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-type Props = {};
+type ProductDetailsNavProp = NativeStackNavigationProp<RouteStackParamList, 'ProductDetails'>;
 
-const HomeTab = (props: Props) => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  type RootStackParamList = {
-    Setting: undefined;
+interface CategoryItem {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+}
+
+const categories: CategoryItem[] = [
+  { id: '1', name: 'Bag', icon: 'shopping-bag' },
+  { id: '2', name: 'Shoes', icon: 'sports-gymnastics' },
+  { id: '3', name: 'Electronic', icon: 'phone-android' },
+  { id: '4', name: 'Clothes', icon: 'checkroom' },
+  { id: '5', name: 'Watch', icon: 'watch' },
+  { id: '6', name: 'Furniture', icon: 'weekend' },
+  { id: '7', name: 'Kitchen', icon: 'kitchen' },
+  { id: '8', name: 'Toys', icon: 'toys' },
+];
+
+const filterTabs = ['All', 'Clothes', 'Shoe', 'Bags'];
+
+const products: Product[] = [
+  {
+    id: '1',
+    name: 'Black Jacket',
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=400&fit=crop',
+    price: '$89.99',
+  },
+  {
+    id: '2',
+    name: 'Grey Shirt',
+    image: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=300&h=400&fit=crop',
+    price: '$45.99',
+  },
+  {
+    id: '3',
+    name: 'Black Jacket',
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=400&fit=crop',
+    price: '$89.99',
+  },
+  {
+    id: '4',
+    name: 'Grey Shirt',
+    image: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=300&h=400&fit=crop',
+    price: '$45.99',
+  },
+];
+
+const HomeTab: React.FC = () => {
+  const navigation = useNavigation<ProductDetailsNavProp>();
+  const handleProductDetailPageRedirect = (product: Product) => {
+    navigation.navigate('ProductDetails', {
+      productId: product.id,
+    });
   };
-  // real data
-  const [products, setProducts] = useState<ProductTypes[]>([]);
-  useEffect(() => {
-    // fetch data
-    const fetchData = async () => {
-      const data = await fetch('http://10.0.2.2:4000/api/products/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      });
-      const response = await data.json();
-      console.log(response);
-      setProducts(response);
-    };
-    fetchData();
-  }, [products]); // update when products items updated
 
-  const NavigateToProfile = async () => {
-    navigation.navigate('Setting');
-    await removeItem('onboarded'); // will reset to onboarding
-  };
-  const handleSelectCategory = () => { };
+
+
+  const renderOfferCard = (title: string, discount: string, bgColor: string) => (
+    <View
+      className="rounded-xl p-4 mr-3 justify-between"
+      style={{
+        width: SCREEN_WIDTH * 0.85,
+        height: 190,
+        backgroundColor: bgColor
+      }}
+    >
+      <View className="bg-white bg-opacity-20 px-2 py-1 rounded-xl self-start">
+        <Text className="text-black text-xs font-medium">Limited time!</Text>
+      </View>
+      <Text className="text-white text-xl font-bold mt-2">{title}</Text>
+      <Text className="text-white text-4xl font-bold">{discount} off</Text>
+      <Text className="text-white text-xs opacity-80">All category available | T&C applied</Text>
+      <TouchableOpacity className="bg-white px-4 py-2 rounded-2xl self-start mt-2">
+        <Text className="text-gray-800 text-sm font-semibold">Claim</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderCategoryItem = (item: CategoryItem) => (
+    <TouchableOpacity key={item.id} className="w-1/4 items-center mb-5">
+      <View className="w-12 h-12 rounded-full bg-gray-100 justify-center items-center mb-2">
+        <Icon name={item.icon} size={24} color="#666" />
+      </View>
+      <Text className="text-xs text-gray-800 text-center">{item.name}</Text>
+    </TouchableOpacity>
+  );
+
+  const renderProductCard = (product: Product) => (
+    <TouchableOpacity
+      key={product.id}
+      onPress={() => handleProductDetailPageRedirect(product)}
+      className="w-[48%] bg-white rounded-xl overflow-hidden shadow-sm"
+    >
+      <TouchableOpacity className="absolute top-3 right-3 z-10 bg-white rounded-2xl w-8 h-8 justify-center items-center shadow-sm">
+        <Icon name="favorite-border" size={20} color="#666" />
+      </TouchableOpacity>
+      <Image
+        source={{ uri: product.image }}
+        className="w-full h-44"
+        style={{ resizeMode: 'cover' }}
+      />
+      <View className="p-3">
+        <Text className="text-sm text-gray-800 mb-1">{product.name}</Text>
+        <Text className="text-base font-bold text-gray-800">{product.price}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
-    <ScrollView>
-      {/* header */}
-      <View className="flex flex-row items-center justify-between mx-5">
-        <Image source={icons.menu} className="w-8 h-8" resizeMode="contain" />
+    <>
+      <ScrollView className="flex-1 bg-gray-50" showsVerticalScrollIndicator={false}>
+        {/* Special Offers */}
+        <View className="mb-6 px-4">
+          <Text className="text-lg font-bold text-gray-800 mb-4">Special Offers</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingRight: 16 }}
+          >
+            {renderOfferCard('Get Special Discount', '40%', '#8B4513')}
+            {renderOfferCard('Get Special Discount', '45%', '#8B0000')}
+          </ScrollView>
+        </View>
 
-        <Image
-          source={images.logo}
-          className="w-24 h-24"
-          resizeMode="contain"
-        />
-        <TouchableOpacity onPress={NavigateToProfile}>
-          <Image
-            source={icons.profile}
-            className="w-8 h-8"
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-      </View>
-      {/* search */}
-      <CustomSearch initialQuery="" />
-      {/* features */}
-      <View className="flex my-5 flex-row mx-5 justify-between ">
-        <Text className="text-2xl font-bold dark:text-red-700 ">AVT </Text>
-        <View className="flex flex-row gap-x-3 ">
-          {FeaturesData.map(item => (
-            <View
-              className="bg-white  rounded-lg  flex-row flex items-center px-2 "
-              key={item.id}>
-              <Text className="text-black-100"> {item.title} </Text>
-              <Image
-                source={item.image}
-                className="w-4 h-4"
-                resizeMode="contain"
-              />
-            </View>
-          ))}
+        {/* Categories */}
+        <View className="mb-6 px-4">
+          <Text className="text-lg font-bold text-gray-800 mb-4">Category</Text>
+          <View className="flex-row flex-wrap justify-between">
+            {categories.map(renderCategoryItem)}
+          </View>
         </View>
-      </View>
-      {/* categories */}
-      <View>
-        <FlatList
-          data={CategoriesData}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={handleSelectCategory}>
-              <Image
-                source={{ uri: item.image }} // it's url
-                className="w-24 h-24 rounded-full"
-              />
-              <Text className="text-black-100/80 text-center text-lg font-medium">
-                {' '}
-                {item.title}{' '}
-              </Text>
+
+        {/* Most Popular*/}
+        <View className="mb-6 px-4">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-lg font-bold text-gray-800">Most Popular</Text>
+            <TouchableOpacity>
+              <Text className="text-sm text-gray-600">See All</Text>
             </TouchableOpacity>
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View className="w-8" />}
-          ListFooterComponent={<View className="w-8" />}
-          ListHeaderComponent={<View className="w-8" />}
-        />
-      </View>
-      {/* offer */}
-      <View>
-        <Image
-          source={images.deal_off}
-          resizeMode="contain"
-          className="w-full mt-8 "
-        />
-      </View>
-      {/* daily .. */}
-      <View className="bg-[#4392F9] rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
-        <View>
-          <Text className="text-white  text-2xl font-semibold">
-            Daily of the Day
-          </Text>
-          <View className="flex flex-row mt-3 items-center gap-x-1">
-            <Image
-              source={icons.calender}
-              resizeMode="contain"
-              className="w-6 h-6"
-            />
-            <Text className="text-white text-base font-medium">
-              {' '}
-              22h 55m 20s remaining{' '}
-            </Text>
           </View>
-        </View>
-        <View className="rounded-lg border-white border-2 mr-3 h-12 px-3 flex flex-row gap-x-px items-center">
-          <Text className="text-white font-medium text-lg">View all</Text>
-          <Image
-            source={icons.show_all}
-            resizeMode="contain"
-            className="w-6 h-6"
+
+          {/* Filters*/}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="mb-4"
+          >
+            {filterTabs.map((tab, index) => (
+              <TouchableOpacity
+                key={tab}
+                className={`px-5 py-2 rounded-2xl mr-3 ${index === 0 ? 'bg-gray-800' : 'bg-gray-100'
+                  }`}
+              >
+                <Text className={`text-sm ${index === 0 ? 'text-white' : 'text-gray-600'
+                  }`}>
+                  {tab}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* grid of products */}
+          <FlatList
+            data={products}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            renderItem={({ item }) => renderProductCard(item)}
+            contentContainerStyle={{ padding: 8 }}
+            scrollEnabled={false} // this is done to prevent a warning of using flastlist inside scrollview
+            columnWrapperStyle={{ justifyContent: 'space-between', gap: 8 }}
+            ItemSeparatorComponent={() => <View style={{ marginBottom: 14 }} />} // for spacing between rows
           />
         </View>
-      </View>
-      {/* Products */}
-      <View className="my-8">
-        <FlatList
-          data={products}
-          renderItem={({ item }) => (
-            <ProductItem
-              image={item.image[0]}
-              title={item.title}
-              description={item.description}
-              price={item.price}
-              priceBeforeDeal={item.priceBeforeDeal}
-              priceOff={item.priceOff}
-              stars={item.stars}
-              numberOfReview={item.numberOfReview}
-              itemDetails={item}
-            />
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View className="w-8" />}
-          ListFooterComponent={<View className="w-8" />}
-          ListHeaderComponent={<View className="w-8" />}
-        />
-      </View>
-      {/* special Offer */}
-      <View className="flex my-5 justify-between bg-white flex-row items-center py-3 px-4 mx-5 rounded-lg">
-        <Image
-          source={icons.offer}
-          className="w-24 h-24"
-          resizeMode="contain"
-        />
-        <View className="">
-          <Text className="text-2xl mb-1 text-black-100 font-bold">
-            Special Offers
-          </Text>
-          <Text className="text-neutral-500 text-base w-52">
-            We make sure you get the offer you need at best prices
-          </Text>
-        </View>
-      </View>
-      {/* Flat Shoes Offer */}
-      <View className="my-5">
-        <Image
-          source={images.flat}
-          className="self-center "
-          resizeMode="contain"
-        />
-      </View>
-      {/* Trending Products */}
-      <View className="bg-red-500 rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
-        <View>
-          <Text className="text-white  text-2xl font-semibold">
-            Daily of the Day
-          </Text>
-          <View className="flex flex-row mt-3 items-center gap-x-1">
-            <Image
-              source={icons.calender}
-              resizeMode="contain"
-              className="w-6 h-6"
-            />
-            <Text className="text-white text-base font-medium">
-              {' '}
-              22h 55m 20s remaining{' '}
-            </Text>
-          </View>
-        </View>
-        <View className="rounded-lg border-white border-2 mr-3 h-12 px-3 flex flex-row gap-x-px items-center">
-          <Text className="text-white font-medium text-lg">View all</Text>
-          <Image
-            source={icons.show_all}
-            resizeMode="contain"
-            className="w-6 h-6"
-          />
-        </View>
-      </View>
-      {/* Products */}
-      <View className="my-8">
-        <FlatList
-          data={products}
-          renderItem={({ item }) => (
-            <ProductItem
-              image={item.image[0]}
-              title={item.title}
-              description={item.description}
-              price={item.price}
-              priceBeforeDeal={item.priceBeforeDeal}
-              priceOff={item.priceOff}
-              stars={item.stars}
-              numberOfReview={item.numberOfReview}
-              itemDetails={item}
-            />
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View className="w-8" />}
-          ListFooterComponent={<View className="w-8" />}
-          ListHeaderComponent={<View className="w-8" />}
-        />
-      </View>
-      {/* .... */}
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
 export default HomeTab;
-
-type FeaturesDataProps = {
-  id: number;
-  title: string;
-  image: ImageSourcePropType;
-};
-
-export const FeaturesData: FeaturesDataProps[] = [
-  {
-    id: 1,
-    title: 'Sort',
-    image: icons.sort,
-  },
-  {
-    id: 2,
-    title: 'Filter',
-    image: icons.filter,
-  },
-];

@@ -1,71 +1,58 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeTab, WishlistTab, CartTab, SearchTab, SettingTab} from '../tabs';
-import {Image, Text, View} from 'react-native';
-import {icons} from '../constants';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { HomeTab, WishlistTab, CartTab, SearchTab, SettingTab } from '../tabs';
 import { ItemDetails } from '../constants/types';
 
-type TabBarItemProps = {
-  source: any; // Adjust type according to your image sources
-  focused: boolean;
-  cart?: boolean;
-  name?: string;
+export type RouteTabsParamList = {
+  Home: undefined;
+  Wishlist: undefined;
+  Cart: { itemDetails: ItemDetails } | undefined;
+  Search: { query: string } | undefined;
+  Setting: undefined;
 };
-const TabBarItem: React.FC<TabBarItemProps> = ({
-  source,
-  focused,
-  cart,
-  name,
-}) => {
+
+interface TabIconProps {
+  iconName: string;
+  focused: boolean;
+  isCart?: boolean;
+  label: string;
+}
+
+const TabIcon: React.FC<TabIconProps> = ({ iconName, focused, isCart, label }) => {
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: cart ? -24 : 18,
-      }}>
+    <View className={`items-center justify-center ${isCart ? '-mt-10 shadow-xl shadow-black-100 bg-white rounded-full' : 'mt-4'}`}>
       <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: cart ? 64 : 'auto',
-          height: cart ? 64 : 'auto',
-          borderRadius: cart ? 32 : 0,
-          backgroundColor: focused ? (cart ? 'red' : 'white') : 'white',
-          shadowColor: '#000',
-          shadowOffset: {width: 0, height: 2},
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: cart ? 5 : 0,
-        }}>
-        <Image
-          source={source}
-          style={{
-            tintColor: focused ? (cart ? 'white' : 'red') : 'black',
-            width: 28,
-            height: 28,
-          }}
+        className={`items-center p-2 justify-center ${isCart
+          ? 'w-16 h-16 rounded-full shadow-lg bg-gray-900'
+          : 'w-auto h-auto -mt-4'
+          } ${focused
+            ? isCart
+              ? ''
+              : 'bg-gray-800 rounded-full'
+            : 'bg-transparent'
+          }`}
+      >
+        <Icon
+          name={iconName}
+          size={28}
+          color={focused ? 'white' : '#666'}
         />
       </View>
-      {!cart && (
+      {!isCart && (
         <Text
-          className="font-pthin text-base"
-          style={{color: focused ? 'red' : 'black', fontSize: 12}}>
-          {name}
+          className={`text-xs ${focused ? ' font-medium' : 'font-medium text-gray-900'
+            }`}
+        >
+          {label}
         </Text>
       )}
     </View>
   );
 };
-type Props = {};
-export type RouteTabsParamList = {
-  Home: undefined;
-  Wishlist: undefined;
-  Cart: {itemDetails: ItemDetails}  | undefined;
-  Search: {query: string} | undefined;
-  Setting: undefined;
-};
-const HomeScreen = (props: Props) => {
+
+const HomeScreen: React.FC = () => {
   const Tab = createBottomTabNavigator<RouteTabsParamList>();
 
   return (
@@ -75,42 +62,41 @@ const HomeScreen = (props: Props) => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: 'white',
-          borderTopColor: 'grey',
-          height: 70,
-          borderTopWidth: 0.2,
+          borderTopColor: '#e5e5e5',
+          height: 80,
+          borderTopWidth: 0.5,
           shadowColor: '#000',
-          shadowOffset: {width: 0, height: 2},
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 8,
         },
-        tabBarIconStyle: {
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        tabBarInactiveTintColor: 'black',
-        tabBarActiveTintColor: 'red',
-      }}>
+        tabBarShowLabel: false,
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeTab}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
-            <TabBarItem source={icons.home} focused={focused} name="Home" />
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              iconName="home"
+              focused={focused}
+              label="Home"
+            />
           ),
         }}
       />
+
       <Tab.Screen
         name="Wishlist"
         component={WishlistTab}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
-            <TabBarItem
-              source={icons.heart}
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              iconName="favorite-border"
               focused={focused}
-              name="Wishlist"
+              label="Wishlist"
             />
           ),
         }}
@@ -120,13 +106,12 @@ const HomeScreen = (props: Props) => {
         name="Cart"
         component={CartTab}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
-            <TabBarItem
-              source={icons.cart}
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              iconName="shopping-cart"
               focused={focused}
-              cart
-              name="Cart"
+              isCart
+              label="Cart"
             />
           ),
         }}
@@ -136,22 +121,25 @@ const HomeScreen = (props: Props) => {
         name="Search"
         component={SearchTab}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
-            <TabBarItem source={icons.search} focused={focused} name="Search" />
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              iconName="search"
+              focused={focused}
+              label="Search"
+            />
           ),
         }}
       />
+
       <Tab.Screen
         name="Setting"
         component={SettingTab}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
-            <TabBarItem
-              source={icons.setting}
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              iconName="settings"
               focused={focused}
-              name="Setting"
+              label="Setting"
             />
           ),
         }}

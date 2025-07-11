@@ -1,12 +1,11 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
 
-type Props = {};
 
-const WishlistTab = (props: Props) => {
+const WishlistTab = () => {
   return (
     <View>
-      <Text>WishlistTab</Text>
+      <Text className='dark:text-white'>WishlistTab</Text>
     </View>
   );
 };

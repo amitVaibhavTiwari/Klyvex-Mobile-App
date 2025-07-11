@@ -20,6 +20,7 @@ import { getItem } from './src/utils/AsyncStorage';
 import { ActivityIndicator, View } from 'react-native';
 import { GlobalContextProvider } from './src/lib/GlobalContext/GlobalContext';
 import ThemeWrapper from './src/components/ThemeWrapper/ThemeWrapper';
+import Navbar from './src/components/Navbar/Navbar';
 
 export type RouteStackParamList = {
   Onboarding: undefined;
@@ -31,7 +32,7 @@ export type RouteStackParamList = {
   Checkout: undefined;
   PlaceOrder: { itemDetails: ItemDetails } | undefined;
   ForgotPassword: undefined;
-  ProductDetails: { itemDetails: ItemDetails } | undefined;
+  ProductDetails: { productId: string } | undefined;
 };
 
 const App = () => {
@@ -46,7 +47,7 @@ const App = () => {
   const checkIfAlreadyOnboarded = async () => {
     const onboarded = await getItem('onboarded');
     if (onboarded === 200) {
-      // successfully onboarded, don't show onboarding screen once again
+      // successfully onboarded, don't show onboarding screen again
       setShowOnboarded(false);
       console.log(`it's value should be 200:`, onboarded);
     } else {
@@ -68,6 +69,7 @@ const App = () => {
       <GlobalContextProvider>
         <ThemeWrapper>
           <NavigationContainer>
+            <Navbar />
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
               initialRouteName={showOnboarded ? 'Onboarding' : 'HomeScreen'}>
@@ -76,12 +78,13 @@ const App = () => {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Onboarding" component={OnboardingScreen} />
               <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
-              <Stack.Screen name="Profile" component={ProfileScreen} />
               <Stack.Screen name="Signup" component={SignupScreen} />
               <Stack.Screen name="Checkout" component={CheckoutScreen} />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
               <Stack.Screen
                 name="ProductDetails"
                 component={ProductsDetailsScreen}
+
               />
               <Stack.Screen
                 name="ForgotPassword"
