@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { NavigationContainer, ThemeProvider } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
-  CheckoutScreen,
-  ForgotPasswordScreen,
   HomeScreen,
-  LoginScreen,
   OnboardingScreen,
-  PlaceOrder,
   ProductsDetailsScreen,
-  ProfileScreen,
-  SignupScreen,
 } from './src/screens';
 import SplashScreen from 'react-native-splash-screen';
-import GetStartedScreen from './src/screens/GetStartedScreen';
-import { ItemDetails } from './src/constants/types';
 import { getItem } from './src/utils/AsyncStorage';
 import { ActivityIndicator, View } from 'react-native';
 import { GlobalContextProvider } from './src/lib/GlobalContext/GlobalContext';
@@ -24,14 +16,7 @@ import Navbar from './src/components/Navbar/Navbar';
 
 export type RouteStackParamList = {
   Onboarding: undefined;
-  GetStarted: undefined;
-  Login: undefined;
-  Signup: undefined;
   HomeScreen: undefined;
-  Profile: undefined;
-  Checkout: undefined;
-  PlaceOrder: { itemDetails: ItemDetails } | undefined;
-  ForgotPassword: undefined;
   ProductDetails: { productId: string } | undefined;
 };
 
@@ -74,21 +59,11 @@ const App = () => {
               screenOptions={{ headerShown: false }}
               initialRouteName={showOnboarded ? 'Onboarding' : 'HomeScreen'}>
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
-              <Stack.Screen name="GetStarted" component={GetStartedScreen} />
-              <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-              <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
-              <Stack.Screen name="Signup" component={SignupScreen} />
-              <Stack.Screen name="Checkout" component={CheckoutScreen} />
-              <Stack.Screen name="Profile" component={ProfileScreen} />
               <Stack.Screen
                 name="ProductDetails"
                 component={ProductsDetailsScreen}
 
-              />
-              <Stack.Screen
-                name="ForgotPassword"
-                component={ForgotPasswordScreen}
               />
             </Stack.Navigator>
           </NavigationContainer>
