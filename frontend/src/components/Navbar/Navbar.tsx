@@ -44,7 +44,6 @@ const Navbar: React.FC<NavbarProps> = ({ onNotificationPress }) => {
 
     return (
         <>
-            {/* Navbar */}
             <View style={styles.navbar}>
                 <TouchableOpacity onPress={() => toggleSideMenu()} style={styles.iconButton}>
                     <Icon name="menu" size={24} color="#333" />
@@ -57,16 +56,16 @@ const Navbar: React.FC<NavbarProps> = ({ onNotificationPress }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Overlay */}
+            {/* black overlay */}
             {sideMenuVisible && (
                 <TouchableOpacity
                     style={styles.overlay}
                     activeOpacity={1}
-                    onPress={closeSideMenu}
+                    onPressIn={() => closeSideMenu()}
                 />
             )}
 
-            {/* Side Menu */}
+            {/* actual side Menu */}
             <Animated.View
                 style={[
                     styles.sideMenu,
@@ -77,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNotificationPress }) => {
             >
                 <View style={styles.sideMenuHeader}>
                     <Text style={styles.sideMenuTitle}>Menu</Text>
-                    <TouchableOpacity onPress={() => closeSideMenu()}>
+                    <TouchableOpacity onPressIn={() => closeSideMenu()}>
                         <Icon name="close" size={24} color="#333" />
                     </TouchableOpacity>
                 </View>

@@ -1,12 +1,11 @@
 import { View, Text } from 'react-native';
 import React from 'react';
 
-type Props = {};
 
-const CartTab = (props: Props) => {
+const CartTab = () => {
   return (
     <View>
-      <Text className='dark:text-white'>CartTab</Text>
+      <Text>CartTab</Text>
     </View>
   );
 };

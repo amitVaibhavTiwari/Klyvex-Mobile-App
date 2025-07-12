@@ -1,14 +1,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { HomeTab, WishlistTab, CartTab, SearchTab, SettingTab } from '../tabs';
-import { ItemDetails } from '../constants/types';
+import { HomeTab, WishlistTab, CartTab, SearchTab, SettingTab } from '../../tabs';
 
 export type RouteTabsParamList = {
   Home: undefined;
   Wishlist: undefined;
-  Cart: { itemDetails: ItemDetails } | undefined;
+  Cart: undefined;
   Search: { query: string } | undefined;
   Setting: undefined;
 };
@@ -22,17 +21,16 @@ interface TabIconProps {
 
 const TabIcon: React.FC<TabIconProps> = ({ iconName, focused, isCart, label }) => {
   return (
-    <View className={`items-center justify-center ${isCart ? '-mt-10 shadow-xl shadow-black-100 bg-white rounded-full' : 'mt-4'}`}>
+    <View style={[
+      styles.tabIconContainer,
+      isCart ? styles.cartIconContainer : styles.regularIconContainer
+    ]}>
       <View
-        className={`items-center p-2 justify-center ${isCart
-          ? 'w-16 h-16 rounded-full shadow-lg bg-gray-900'
-          : 'w-auto h-auto -mt-4'
-          } ${focused
-            ? isCart
-              ? ''
-              : 'bg-gray-800 rounded-full'
-            : 'bg-transparent'
-          }`}
+        style={[
+          styles.iconWrapper,
+          isCart ? styles.cartIconWrapper : styles.regularIconWrapper,
+          focused ? (isCart ? styles.cartIconFocused : styles.regularIconFocused) : styles.iconUnfocused
+        ]}
       >
         <Icon
           name={iconName}
@@ -42,8 +40,10 @@ const TabIcon: React.FC<TabIconProps> = ({ iconName, focused, isCart, label }) =
       </View>
       {!isCart && (
         <Text
-          className={`text-xs ${focused ? ' font-medium' : 'font-medium text-gray-900'
-            }`}
+          style={[
+            styles.tabLabel,
+            focused ? styles.tabLabelFocused : styles.tabLabelUnfocused
+          ]}
         >
           {label}
         </Text>
@@ -147,5 +147,62 @@ const HomeScreen: React.FC = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabIconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cartIconContainer: {
+    width: 64,
+    height: 64,
+    marginTop: -40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 12,
+    backgroundColor: 'white',
+    borderRadius: 100,
+  },
+  regularIconContainer: {
+    marginTop: 16,
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    padding: 8,
+    justifyContent: 'center',
+  },
+  cartIconWrapper: {
+  },
+  regularIconWrapper: {
+    width: 'auto',
+    height: 'auto',
+    marginTop: -16,
+  },
+  cartIconFocused: {
+    backgroundColor: "black",
+    borderRadius: 100,
+    width: 64,
+    height: 64,
+  },
+  regularIconFocused: {
+    backgroundColor: '#1f2937',
+    borderRadius: 50,
+  },
+  iconUnfocused: {
+    backgroundColor: 'transparent',
+  },
+  tabLabel: {
+    fontSize: 12,
+  },
+  tabLabelFocused: {
+    fontWeight: '500',
+  },
+  tabLabelUnfocused: {
+    fontWeight: '500',
+    color: '#111827',
+  },
+});
 
 export default HomeScreen;

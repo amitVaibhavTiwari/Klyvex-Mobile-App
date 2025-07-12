@@ -4,7 +4,7 @@ import React from 'react';
 const SearchTab: React.FC = () => {
   return (
     <View>
-      <Text className="dark:text-white">SearchTab</Text>
+      <Text>SearchTab</Text>
     </View>
   );
 };

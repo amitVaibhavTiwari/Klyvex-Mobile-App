@@ -2,7 +2,7 @@ import { Text } from 'react-native';
 const SettingTab = () => {
   return (
     <>
-      <Text className="dark:text-white">Settings Screen</Text>
+      <Text>Settings Tab</Text>
     </>
   );
 };

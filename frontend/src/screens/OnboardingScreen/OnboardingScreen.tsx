@@ -3,8 +3,8 @@ import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { setItem } from '../utils/AsyncStorage';
-import { RouteStackParamList } from '../../App';
+import { setItem } from '../../utils/AsyncStorage';
+import { RouteStackParamList } from '../../../App';
 
 type Props = {};
 export type RootStackParamList = {
@@ -17,7 +17,7 @@ const OnboardingScreen = (props: Props) => {
 
   const handleDone = async () => {
     await setItem('onboarded', 200);
-    navigation.navigate('HomeScreen'); // on press will navigate to HomeScreen
+    navigation.navigate('HomeScreen');
   };
 
   return (

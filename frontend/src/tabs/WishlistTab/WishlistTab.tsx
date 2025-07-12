@@ -5,7 +5,7 @@ import React from 'react';
 const WishlistTab = () => {
   return (
     <View>
-      <Text className='dark:text-white'>WishlistTab</Text>
+      <Text>WishlistTab</Text>
     </View>
   );
 };
