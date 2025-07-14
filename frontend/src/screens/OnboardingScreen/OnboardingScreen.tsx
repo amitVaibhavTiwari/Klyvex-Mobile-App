@@ -1,5 +1,4 @@
 import { View, Image } from 'react-native';
-import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -21,7 +20,7 @@ const OnboardingScreen = (props: Props) => {
   };
 
   return (
-    <View className="flex-1">
+    <View style={{ flex: 1 }}>
       <Onboarding
         onSkip={handleDone} // when skip or done go to home screen
         onDone={handleDone}

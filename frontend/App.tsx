@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -44,7 +44,7 @@ const App = () => {
 
   if (showOnboarded === null) {
     return (
-      <View className="flex flex-1 justify-center items-center">
+      <View>
         <ActivityIndicator size={'large'} color={'#F3F3F3'} />
       </View>
     );
@@ -63,7 +63,6 @@ const App = () => {
               <Stack.Screen
                 name="ProductDetails"
                 component={ProductsDetailsScreen}
-
               />
             </Stack.Navigator>
           </NavigationContainer>

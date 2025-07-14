@@ -45,7 +45,7 @@ const ThemeWrapper: React.FC<ThemeWrapperProps> = ({ children }) => {
 
     return (
         <>
-            <View className={`flex-1 ${state.theme === 'dark' ? 'dark' : ''}`}>
+            <View style={{ flex: 1 }}>
                 {children}
             </View>
         </>
